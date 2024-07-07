@@ -1,4 +1,10 @@
 // vendor
+window.Flickity = require('flickity');
+window.Uuid = require('uuid');
+require('lazysizes/plugins/bgset/ls.bgset');
+require('lazysizes');
+require('lazysizes/plugins/parent-fit/ls.parent-fit');
+
 // import function to register Swiper custom elements
 window.register = require('../node_modules/swiper/swiper-element-bundle');
 // register Swiper custom elements

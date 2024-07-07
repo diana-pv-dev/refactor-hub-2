@@ -25,17 +25,53 @@
 
 	{% comment %} Custom fonts {% endcomment %}
 
-    {% if settings.font_heading == 'example-font' or settings.font_body == 'example-font' %}
+  {% if settings.font_heading == 'futura-pt' or settings.font_body == 'futura-pt' %}
+      @font-face {
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-Book.ttf' | asset_url }}) format('truetype');
+        font-weight: 400;
+        font-style: normal;
+      }
+
 	    @font-face {
-	        font-family: 'Example Font';
-	        src: url({{ 'ExampleFont.ttf' | asset_url }}) format('truetype')
-                url({{ 'ExampleFont.otf' | asset_url }}) format('opentype')
-                url({{ 'ExampleFont.woff2' | asset_url }}) format('woff2')
-                url({{ 'ExampleFont.woff' | asset_url }}) format('woff');
-	        font-weight: 400;
-	        font-style: normal;
-	        font-display: swap; {% comment %} Remove this for the main font weight/style {% endcomment %}
-	    }
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-Light.ttf' | asset_url }}) format('truetype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-Medium.ttf' | asset_url }}) format('truetype');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-Bold.ttf' | asset_url }}) format('truetype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-ExtraBold.ttf' | asset_url }}) format('truetype');
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Futura PT';
+        src: url({{ 'FuturaPT-Heavy.ttf' | asset_url }}) format('truetype');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
     {% endif %}
 
 	{% comment %} CSS variables {% endcomment %}
@@ -46,18 +82,18 @@
         --color-heading: {{ settings.color_heading }};
         --color-link: {{ settings.color_link }};
 
-		{% case settings.font_heading %}
+    {% case settings.font_heading %}
 			{% when 'shopify' %}
 		        --font-heading: {{ settings.font_heading_shopify.family }}, {{ settings.font_heading.fallback_families }};
-			{% when 'example-font' %}
-		        --font-heading: 'Example Font', sans-serif;
+			{% when 'futura-pt' %}
+		        --font-heading: 'Futura PT', sans-serif;
 		{% endcase %}
 
 		{% case settings.font_body %}
 			{% when 'shopify' %}
 		        --font-body: {{ settings.font_body_shopify.family }}, {{ settings.font_body.fallback_families }};
-			{% when 'example-font' %}
-		        --font-body: 'Example Font', sans-serif;
+			{% when 'futura-pt' %}
+		        --font-body: 'Futura PT', sans-serif;
 		{% endcase %}
     }
 </style>

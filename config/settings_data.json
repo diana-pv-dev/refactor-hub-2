@@ -1,10 +1,13 @@
 {
   "current": {
-    "font_body": "shopify",
+    "font_body": "futura-pt",
     "font_body_shopify": "work_sans_n4",
-    "font_heading": "shopify",
+    "font_heading": "futura-pt",
     "font_heading_shopify": "sans-serif",
-    "content_for_index": []
+    "sections": {},
+    "content_for_index": [
+
+    ]
   },
   "presets": {
     "Default": {

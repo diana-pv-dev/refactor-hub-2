@@ -64,11 +64,11 @@
             "label": "Shopify"
           },
           {
-            "value": "example-font",
-            "label": "Example font"
+            "value": "futura-pt",
+            "label": "Futura PT"
           }
         ],
-        "default": "shopify"
+        "default": "futura-pt"
       },
       {
         "type": "font_picker",
@@ -91,11 +91,11 @@
             "label": "Shopify"
           },
           {
-            "value": "example-font",
-            "label": "Example font"
+            "value": "futura-pt",
+            "label": "Futura PT"
           }
         ],
-        "default": "shopify"
+        "default": "futura-pt"
       },
       {
         "type": "font_picker",
