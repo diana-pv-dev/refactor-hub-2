@@ -1,0 +1,200 @@
+{% assign product_available = true %}
+{% assign product_variant = null %}
+{% assign products_cart = cart.items | where: 'variant_id', product.selected_or_first_available_variant.id %}
+
+{% if product.selected_or_first_available_variant.inventory_management %}
+  {% if product.selected_or_first_available_variant.inventory_quantity <= 0 or product.selected_or_first_available_variant.available == false or products_cart[0].quantity == product.selected_or_first_available_variant.inventory_quantity %}
+    {% assign product_available = false %}
+  {% endif %}
+{% else %}
+  {% if product.selected_or_first_available_variant.available == false or products_cart[0].quantity == product.selected_or_first_available_variant.inventory_quantity %}
+    {% assign product_available = false %}
+  {% endif %}
+{% endif %}
+
+{% if product.selected_variant.id %}
+  {% assign product_variant = product.selected_variant %}
+{% else %}
+  {% assign product_variant = product.variants[0] %}
+{% endif %}
+
+<c-variant-picker
+  class="c-variant-picker {% if localization.language.iso_code == 'ar' %}c-variant-picker--direction--rtl{% endif %} js-variant-picker"
+  data-error="false"
+  data-variant-id="{{ product_variant.id }}"
+  data-price="{{ product_variant.price }}"
+  {% if product_variant.compare_at_price %}
+    data-old-price="{{ product_variant.compare_at_price }}"
+  {% endif %}
+>
+  {% liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  %}
+  {% for option in product.options_with_values %}
+    {% if option.values.size > 1 %}
+  <div
+    class="c-variant-picker__options-opener js-variant-picker__options-opener"
+    data-option="{{ option.name | handleize }}"
+    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    data-product-handle="{{ product.handle }}"
+  >
+    {% render "icon-right-arrow" %}
+    {{ option.name }}:
+
+     <span
+        data-option="{{ option.name | handleize }}"
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        data-product-handle="{{ product.handle }}"
+      >
+        {{ selected_variant.options[forloop.index0] }}
+      </span>
+  </div>
+  {% else %}
+    <div class="c-variant-picker__options-opener">
+    {{ option.name }}:
+    <span>
+      {{ selected_variant.options[forloop.index0] }}
+    </span>
+  </div>
+{% endif %}
+  {% endfor %}
+
+
+  {% assign submit_button_additional_class = '' %}
+
+  {% form 'product', product, class: 'c-variant-picker__form js-variant-picker__form' %}
+  <input 
+    class="c-variant-picker__variant-id js-variant-picker__variant-id" 
+    type="hidden" 
+    name="id"
+    value="{{ product.selected_or_first_available_variant.id }}"
+  >
+  <input
+    class="c-variant-picker__variant-qty js-variant-picker__variant-qty"
+    type="hidden"
+    name="qty"
+    value="{{ product.selected_or_first_available_variant.inventory_quantity }}"
+  >
+  <input 
+    class="c-variant-picker__variant-id js-variant-picker__quantity" 
+    type="hidden" 
+    name="quantity" 
+    value="1"
+  >
+  <div
+    class="c-variant-picker__buttons-wrapper js-variant-picker__sticky-target"
+    data-available='{{product_available}}'
+  >
+    {% if product.tags contains 'pre-order' and product_variant.inventory_policy == 'continue' %}
+      {% render 'engraving-body', is_pdp: true, product: product %}
+
+      {% unless product_available %}
+        {% render 'pre-order', product: product  %}
+        {% assign submit_button_additional_class = 'c-variant-picker__button--hide' %}
+      {% endunless %}
+
+      <button
+        type="submit"
+        class="c-variant-picker__button js-variant-picker__button {{ submit_button_additional_class }}"
+      >
+        {{ 'sections.product.add_to_cart' | t }}
+        <span class="c-variant-picker__button-bt-counter js-variant-picker__button-bt-counter"></span>
+      </button>
+
+      {% render 'wishlist-button', class: 'c-variant-picker__wishlist-btn js-variant-picker__wishlist-btn', product: product %}
+
+      <span class="c-variant-picker__message js-variant-picker__message">
+        {{ 'components.variant_picker.pre-order-products-message_html' | t }}
+      </span>
+    {% else %}
+      {% if product_available %}
+        {% unless product.tags contains 'gift-card' %}
+          {% render 'engraving-body', is_pdp: true, product: product %}
+        {% endunless %}
+
+        <button
+          type="submit"
+          class="c-variant-picker__button js-variant-picker__button {{ submit_button_additional_class }}"
+        >
+          {{ 'sections.product.add_to_cart' | t }}
+          <span class="c-variant-picker__button-bt-counter js-variant-picker__button-bt-counter"></span>
+        </button>
+
+        {% render 'wishlist-button', class: 'c-variant-picker__wishlist-btn js-variant-picker__wishlist-btn', product: product %}
+
+      {% else %}
+        <button
+          type="button"
+          class="c-variant-picker__button js-variant-picker__button-notify"
+          data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+          data-product-handle="{{ product.handle }}"
+        >
+          {{ 'sections.product.notify_me' | t }}
+        </button>
+
+        {% render 'wishlist-button', class: 'c-variant-picker__wishlist-btn js-variant-picker__wishlist-btn', product: product %}
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="c-variant-picker__sticky-wrapper js-variant-picker__sticky-wrapper">
+    <div class="c-variant-picker__sticky-container">
+      <div class="c-variant-picker__sticky-header">
+        <div class="c-variant-picker__sticky-img">
+          {% if product.selected_or_first_available_variant.image != blank %}
+            {% render "image-lazy", image: product.selected_or_first_available_variant.image %}
+          {% elsif product.featured_image != blank %}
+            {% render "image-lazy", image: product.featured_image %}
+          {% endif %}
+        </div>
+        <h3 class="c-variant-picker__sticky-title">{{ product.title }}</h3>
+      </div>
+      <div class="c-variant-picker__sticky-options">
+        {% for option in product.options_with_values %}
+          {% if option.name == "Size" %}
+            <p>
+              <span>{{ option.name }}:</span>
+              {{ product.selected_or_first_available_variant.options[forloop.index0] }}
+            </p>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="c-variant-picker__sticky-prices">
+        {%- if product.selected_or_first_available_variant.compare_at_price -%}
+        <span class="c-variant-picker__sticky-price--new">
+          {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}
+        </span>
+        <span class="c-variant-picker__sticky-price--compare-at" style="text-decoration:line-through">
+          {{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}
+        </span>
+        {%- else -%}
+        <span>
+          {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}
+        </span>
+        {%- endif -%}
+      </div>
+      <div class="c-variant-picker__sticky-buttons">
+        {% if product_available %}
+          <button type="submit" class="c-variant-picker__button js-variant-picker__button">
+            {{ 'sections.product.add_to_cart' | t }}
+            <span class="c-variant-picker__button-bt-counter js-variant-picker__button-bt-counter"></span>
+          </button>
+        {% else %}
+          {% if product.tags contains 'pre-order' and product_variant.inventory_policy == 'continue' %}
+            {% render 'pre-order', product: product  %}
+          {% else %}
+          <button
+            type="button"
+            class="c-variant-picker__button js-variant-picker__button-notify"
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+            data-product-handle="{{ product.handle }}"
+          >
+            {{ 'sections.product.notify_me' | t }}
+          </button>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endform %}
+</c-variant-picker>

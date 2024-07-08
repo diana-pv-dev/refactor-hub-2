@@ -1,0 +1,20 @@
+<product-gallery class="c-product-sliders">
+    <div class="c-product-sliders__gallery js-product-sliders__gallery">
+        {% for media in product.media %}
+            {% if media.media_type == "image" %}
+            <div class="c-product-sliders__gallery-cell js-product-sliders__gallery-cell" data-slide="{{- forloop.index0 }}">
+                {% if forloop.index == 1 %}
+                    {% render 'image', image: media, max_width: 768, ratio_wrap: false %}
+                {% else %}
+                    {% render 'image-lazy', image: media %}
+                {% endif %}
+                {% if forloop.index == 1 %}
+                  <div class="c-product-sliders__zoom-icon">
+                    {% render 'icon-zoom' %}
+                  </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</product-gallery>

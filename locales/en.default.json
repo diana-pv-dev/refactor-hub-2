@@ -7,6 +7,31 @@
       "external": "Opens external website."
     }
   },
-  "components": {},
-  "sections": {}
+  "assaf": {
+    "components": {},
+    "sections": {
+      "product": {
+        "discount-text": "Special promotion",
+        "vat": "(VAT included)",
+        "no_vat": "(without VAT)",
+        "add_to_cart": "Add to bag",
+        "notify_me": "Notify Me",
+        "sku": "SKU: ",
+        "related-title": "Bought together:",
+        "size-text": "Select Your Preferred Size",
+        "highlight": {
+          "gift_title_html": "Gift Packaging & Message",
+          "gift_text_html": "Selection at Cart Page",
+          "delivery_title_html": "Fast Delivery",
+          "delivery_text_html": "Estimated delivery between January 25 - January 30",
+          "returns_title_html": "No - Hassle",
+          "returns_text_html": "Returns"
+          },
+        "in-cart": "Already in your Bag",
+        "close-text": "close",
+        "size": "Size",
+        "close": "Close"
+      }
+    },
+  }
 }
